@@ -6,17 +6,23 @@ import {
   Platform,
   Button,
 } from 'react-native'
+import {
+  Container,
+} from 'native-base'
+import { StackNavigator } from 'react-navigation';
+import HangboardRepeaters from "./hangboardRepeaters/HangboardRepeaters";
 
-class App extends React.Component<void, void> {
+
+class Workout extends React.PureComponent<void, void> {
   render() {
     return (
-      <View>
-        <Text>
-          This is an app
-        </Text>
-      </View>
+      <Container>
+        <HangboardRepeaters />
+      </Container>
     )
   }
 }
 
-export default App
+
+
+export default Workout

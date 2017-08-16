@@ -1,0 +1,13 @@
+﻿<Properties StartupConfiguration="{D57DA183-E0B4-4F8F-92A4-94649012F201}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="CrimpMonkey/MyClass.cs">
+    <Files>
+      <File FileName="CrimpMonkey/MyClass.cs" Line="2" Column="22" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.CrimpMonkey.iOS PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.8A32243B-E7E9-46FF-A5B2-B2740E86C50E" />
+</Properties>
