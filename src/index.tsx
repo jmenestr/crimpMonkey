@@ -1,28 +1,18 @@
-import * as React from "react"
+import * as React from 'react';
+import { StackNavigator } from 'react-navigation';
 import {
   View,
   Text,
-  StyleSheet,
-  Platform,
-  Button,
-} from 'react-native'
-import {
-  Container,
-} from 'native-base'
-import { StackNavigator } from 'react-navigation';
-import HangboardRepeaters from "./hangboardRepeaters/HangboardRepeaters";
+} from 'react-native';
+import HangboardRepeater from "./hangboardRepeaters/HangboardRepeaters";
+import HangboardRepeaerEdit from "./hangboardRepeaters/EditRepeater";
+import { navyBlue, lightGrey } from './styles';
 
+const HangboardApp = StackNavigator(
+  {
+    Home: { screen: HangboardRepeater },
+    Edit: { screen: HangboardRepeaerEdit }
+  },
+);
 
-class Workout extends React.PureComponent<void, void> {
-  render() {
-    return (
-      <Container>
-        <HangboardRepeaters />
-      </Container>
-    )
-  }
-}
-
-
-
-export default Workout
+export default HangboardApp;

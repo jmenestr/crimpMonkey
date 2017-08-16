@@ -4,9 +4,10 @@ import {
   View,
   Text,
 } from 'react-native';
-import { Container, Content } from 'native-base'
+import { Container, Content, Icon, Button, } from 'native-base';
 import HangboardRepeaterDetails from "./HangboardRepeaterDetails";
 import Grips from "./Grips";
+import { lightBlue } from '../styles';
 
 export interface GripSet {
   setNumber: number;
@@ -177,7 +178,21 @@ const repeater: Repeater = {
   offDuration: 3,
   grips,
 }
-export default class HangboardRepeaters extends React.PureComponent<{}, State> {
+export default class HangboardRepeater extends React.PureComponent<{}, State> {
+
+  static navigationOptions = ({navigation}: any) => ({
+    headerTitle: <Text>STuff</Text>,
+    headerRight: <Button title='Edit' onPress={() => navigation.navigate('Edit')} />,
+    headerBackTitle: 'stuff',
+    headerStyle: {
+      backgroundColor: lightBlue,
+      shadowColor: 'black',
+      shadowOffset: { width: 5, height: 20}
+    },
+
+    headerTintColor: 'white'
+  })
+
   state: State = {
     repeater
   }
@@ -187,13 +202,16 @@ export default class HangboardRepeaters extends React.PureComponent<{}, State> {
       repeater
     } = this.state;
     return (
-      <Container>
-        <HangboardRepeaterHeader />
-        <Content>
-          <HangboardRepeaterDetails repeater={repeater}  />
-          <Grips grips={repeater.grips} />
-        </Content>
-      </Container>
+      <View>
+        <Text> Hangboard Screen </Text>
+      </View>
+      // <Container>
+      //   <HangboardRepeaterHeader />
+      //   <Content>
+      //     <HangboardRepeaterDetails repeater={repeater}  />
+      //     <Grips grips={repeater.grips} />
+      //   </Content>
+      // </Container>
     )
   }
 }
