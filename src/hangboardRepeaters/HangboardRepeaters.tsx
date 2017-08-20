@@ -3,11 +3,15 @@ import HangboardRepeaterHeader from './HangboardRepeaterHeader';
 import {
   View,
   Text,
+  FlatList,
+  ScrollView,
 } from 'react-native';
-import { Container, Content, Icon, Button, } from 'native-base';
+import { Container, Content, Icon, Button, , Row, Col } from 'native-base';
 import HangboardRepeaterDetails from "./HangboardRepeaterDetails";
-import Grips from "./Grips";
-import { lightBlue } from '../styles';
+import Grips from './Grips';
+import { lightBlue, lightGrey } from '../styles';
+import GripDetail from "./GripDetail";
+import styled from 'styled-components/native';
 
 export interface GripSet {
   setNumber: number;
@@ -53,7 +57,7 @@ const grips: Array<Grip> = [
     ]
   },
   {
-    name: 'Jug',
+    name: '2 Finger Pad',
     sets: [
       {
         setNumber: 1,
@@ -66,103 +70,9 @@ const grips: Array<Grip> = [
         goalWeight: 40,
         reps: 7,
         complete: false
-      }
-    ]
-  },
-  {
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
       },
       {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  },
-  {
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  },
-  {
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  },
-  {
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  },{
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  },{
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
+        setNumber: 3,
         goalWeight: 40,
         reps: 7,
         complete: false
@@ -178,16 +88,21 @@ const repeater: Repeater = {
   offDuration: 3,
   grips,
 }
+
+
+const BorderRight = styled(Col)`
+borderColor: #3D4C67;
+borderRightWidth: 1;
+borderTopWidth: 1;
+`
 export default class HangboardRepeater extends React.PureComponent<{}, State> {
 
   static navigationOptions = ({navigation}: any) => ({
-    headerTitle: <Text>STuff</Text>,
+    headerTitle: <Text style={{color: 'white'}}>Repeaters</Text>,
     headerRight: <Button title='Edit' onPress={() => navigation.navigate('Edit')} />,
-    headerBackTitle: 'stuff',
+    headerBackTitle: 'back',
     headerStyle: {
-      backgroundColor: lightBlue,
-      shadowColor: 'black',
-      shadowOffset: { width: 5, height: 20}
+      backgroundColor: '#3D4C67',
     },
 
     headerTintColor: 'white'
@@ -202,16 +117,23 @@ export default class HangboardRepeater extends React.PureComponent<{}, State> {
       repeater
     } = this.state;
     return (
-      <View>
-        <Text> Hangboard Screen </Text>
+      <View style={{flex: 1, backgroundColor: '#2a3447'}}>
+        <View style={{height: 60, backgroundColor: '#506487'}}>
+          <Row style={{height: 30, justifyContent: 'center'}}><Text style={{color: 'white'}}> { repeater.name }</Text></Row>
+          <Row style={{height: 30}}>
+            <BorderRight>
+              <Text style={{color: 'white'}}> { repeater.onDuration }</Text>
+            </BorderRight>
+            <BorderRight><Text style={{color: 'white'}}> { repeater.offDuration }</Text></BorderRight>
+            <BorderRight><Text style={{color: 'white'}}> { repeater.restDuration }</Text></BorderRight>
+          </Row>
+        </View>
+        <ScrollView style={{flex: 1}}>
+          {
+            repeater.grips.map((grip, index) => <GripDetail key={index} grip={grip} />)
+          }
+          </ScrollView>
       </View>
-      // <Container>
-      //   <HangboardRepeaterHeader />
-      //   <Content>
-      //     <HangboardRepeaterDetails repeater={repeater}  />
-      //     <Grips grips={repeater.grips} />
-      //   </Content>
-      // </Container>
     )
   }
 }
