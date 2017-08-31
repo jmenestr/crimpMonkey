@@ -13,7 +13,7 @@ export interface OwnProps {
 }
 
 const GripDetailCard = styled.View`
-  backgroundColor: #3D4C67;
+  backgroundColor: #1B2845;
   marginTop: 5;
   marginBottom: 5;
 `;

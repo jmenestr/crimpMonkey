@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import HangboardRepeater from "./hangboardRepeaters/HangboardRepeaters";
 import HangboardRepeaerEdit from "./hangboardRepeaters/EditRepeater";
-import { navyBlue, lightGrey } from './styles';
 
 const HangboardApp = StackNavigator(
   {

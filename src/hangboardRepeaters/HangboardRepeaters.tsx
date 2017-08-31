@@ -1,111 +1,38 @@
 import * as React from 'react';
-import HangboardRepeaterHeader from './HangboardRepeaterHeader';
 import {
   View,
   Text,
   FlatList,
   ScrollView,
 } from 'react-native';
-import { Container, Content, Icon, Button, , Row, Col } from 'native-base';
-import HangboardRepeaterDetails from "./HangboardRepeaterDetails";
+import { Row, Col, Icon, Button } from 'native-base';
 import Grips from './Grips';
-import { lightBlue, lightGrey } from '../styles';
 import GripDetail from "./GripDetail";
 import styled from 'styled-components/native';
+import RepeaterDetails from './RepeaterDetails';
+import { Repeater, repeater } from '../store';
 
-export interface GripSet {
-  setNumber: number;
-  goalWeight: number;
-  actualWeight?: number;
-  reps: number;
-  complete: boolean;
-}
-export interface Grip {
-  name: string;
-  sets: Array<GripSet>;
-}
-
-export interface Repeater {
-  name: string;
-  date: Date;
-  restDuration: number;
-  onDuration: number;
-  offDuration: number;
-  grips: Array<Grip>
-}
 
 interface State {
   repeater: Repeater
 }
-
-const grips: Array<Grip> = [
-  {
-    name: 'Jug',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  },
-  {
-    name: '2 Finger Pad',
-    sets: [
-      {
-        setNumber: 1,
-        goalWeight: 30,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 2,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      },
-      {
-        setNumber: 3,
-        goalWeight: 40,
-        reps: 7,
-        complete: false
-      }
-    ]
-  }
-]
-const repeater: Repeater = {
-  name: 'Example Repeater',
-  date: new Date(),
-  restDuration: 180,
-  onDuration: 7,
-  offDuration: 3,
-  grips,
-}
-
-
-const BorderRight = styled(Col)`
-borderColor: #3D4C67;
-borderRightWidth: 1;
-borderTopWidth: 1;
+const BodyText = styled.Text`
+color: #E0E4E8;
+fontSize: 16;
 `
-export default class HangboardRepeater extends React.PureComponent<{}, State> {
+export default class HangboardRepeater extends React.PureComponent<any, State> {
 
   static navigationOptions = ({navigation}: any) => ({
-    headerTitle: <Text style={{color: 'white'}}>Repeaters</Text>,
-    headerRight: <Button title='Edit' onPress={() => navigation.navigate('Edit')} />,
-    headerBackTitle: 'back',
-    headerStyle: {
-      backgroundColor: '#3D4C67',
+    headerTitle: <Text style={{color: 'white', fontSize: 20}}>Repeaters</Text>,
+    headerRight: <Button onPress={() => navigation.navigate('Edit', { repeater })} transparent>
+            <Icon style={{color: 'white'}} name='md-create' />
+          </Button>,
+    headerBackTitleStyle: {
+      color: 'white'
     },
-
-    headerTintColor: 'white'
+    headerStyle: {
+      backgroundColor: '#274060',
+    },
   })
 
   state: State = {
@@ -116,19 +43,14 @@ export default class HangboardRepeater extends React.PureComponent<{}, State> {
     const {
       repeater
     } = this.state;
+
+    const {
+      navigation,
+    } = this.props;
     return (
-      <View style={{flex: 1, backgroundColor: '#2a3447'}}>
-        <View style={{height: 60, backgroundColor: '#506487'}}>
-          <Row style={{height: 30, justifyContent: 'center'}}><Text style={{color: 'white'}}> { repeater.name }</Text></Row>
-          <Row style={{height: 30}}>
-            <BorderRight>
-              <Text style={{color: 'white'}}> { repeater.onDuration }</Text>
-            </BorderRight>
-            <BorderRight><Text style={{color: 'white'}}> { repeater.offDuration }</Text></BorderRight>
-            <BorderRight><Text style={{color: 'white'}}> { repeater.restDuration }</Text></BorderRight>
-          </Row>
-        </View>
-        <ScrollView style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#BDD5EA'}}>
+        <RepeaterDetails repeater={repeater} />
+        <ScrollView style={{flex: 1, paddingHorizontal: 5}}>
           {
             repeater.grips.map((grip, index) => <GripDetail key={index} grip={grip} />)
           }

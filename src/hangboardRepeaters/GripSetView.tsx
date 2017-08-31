@@ -16,12 +16,15 @@ const BodyText = styled.Text`
   fontSize: 16;
 `
 const SetPropView = styled(Col)`
-  backgroundColor: #506487;
+  backgroundColor: #335C81;
   paddingTop: 5;
   paddingLeft: 10;
   paddingRight: 10;
   paddingBottom: 5;
-  borderColor: #3D4C67;
+  borderBottomColor: #39668f;
+  borderRightColor: #39668f;
+  borderLeftColor: #2d5273;
+  borderTopColor: #2d5273;
   borderWidth: 1;
 `
 const GripSetView = ({ set }: Props) => (

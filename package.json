@@ -1,31 +1,41 @@
 {
-	"name": "crimp-monkey",
-	"version": "0.0.1",
-	"private": true,
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"build:watch": "./node_modules/typescript/bin/tsc --watch",
-		"test": "jest"
-	},
-	"dependencies": {
-		"@types/react-native-elements": "^0.13.2",
-		"@types/react-navigation": "^1.0.2",
-		"native-base": "^2.3.1",
-		"react": "next",
-		"react-native": "^0.47.1",
-		"react-navigation": "^1.0.0-beta.9",
-		"styled-components": "^2.1.2"
-	},
-	"devDependencies": {
-		"@types/react": "next",
-		"@types/react-native": "^0.44.3",
-		"babel-jest": "20.0.3",
-		"babel-preset-react-native": "1.9.2",
-		"jest": "20.0.3",
-		"react-test-renderer": "16.0.0-alpha.6",
-		"typescript": "^2.3.2"
-	},
-	"jest": {
-		"preset": "react-native"
-	}
+  "name": "crimp-monkey",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "build:watch": "./node_modules/typescript/bin/tsc --watch",
+    "test": "jest",
+    "haul": "haul start"
+  },
+  "dependencies": {
+    "@types/react-native-elements": "^0.13.2",
+    "@types/react-navigation": "^1.0.2",
+    "@types/react-redux": "^5.0.5",
+    "native-base": "^2.3.1",
+    "react": "16.0.0-alpha.12",
+    "react-native": "^0.47.1",
+    "react-native-textinput-effects": "^0.4.0",
+    "react-native-vector-icons": "^4.3.0",
+    "react-navigation": "^1.0.0-beta.11",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-typescript-actions": "^1.3.0",
+    "styled-components": "^2.1.2",
+    "typescript-fsa": "^2.5.0",
+    "typescript-fsa-reducers": "^0.4.4"
+  },
+  "devDependencies": {
+    "@types/react": "next",
+    "@types/react-native": "^0.44.3",
+    "babel-jest": "20.0.3",
+    "babel-preset-react-native": "1.9.2",
+    "haul": "^1.0.0-beta.5",
+    "jest": "20.0.3",
+    "react-test-renderer": "16.0.0-alpha.6",
+    "typescript": "^2.3.2"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
 }
