@@ -1,24 +1,7 @@
+import { createStore } from 'redux'
+import { Grip, Repeater } from "./hangboardRepeaters/hangboardRepeaterModel";
+import reducer from './hangboardRepeaters/hangboardRepeaterModel';
 
-export interface GripSet {
-  setNumber: number;
-  goalWeight: number;
-  actualWeight?: number;
-  reps: number;
-  complete: boolean;
-}
-export interface Grip {
-  name: string;
-  sets: Array<GripSet>;
-}
-
-export interface Repeater {
-  name: string;
-  date: Date;
-  restDuration: number;
-  onDuration: number;
-  offDuration: number;
-  grips: Array<Grip>
-}
 
 export const grips: Array<Grip> = [
   {
@@ -71,3 +54,11 @@ export const repeater: Repeater = {
   offDuration: 3,
   grips,
 }
+
+interface State {
+  workouts: Array<Repeater>,
+  selectedRepeater: null | Repeater,
+}
+
+const store = createStore(reducer)
+export default store

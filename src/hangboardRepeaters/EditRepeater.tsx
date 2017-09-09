@@ -17,9 +17,18 @@ import { Jiro, Isao } from 'react-native-textinput-effects';
 import NumericInput from "../commonComponents/NumericInput";
 import EditWorkoutForm from './EditWorktoutForm';
 import GripDetail from './GripDetail';
-import { Repeater } from '../store';
+import { Repeater, getRepeater, RepeaterState, Grip } from './hangboardRepeaterModel';
+import { connect } from 'react-redux';
 
-export default class HangboardRepeaerEdit extends React.PureComponent<any, {}> {
+export interface Props {
+  repeater: Repeater
+}
+export type State = Props
+const newGrip: Grip = {
+  name: 'New Grip',
+  sets: []
+}
+class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
   static navigationOptions = ({ navigation }: any) => ({
     headerStyle: {
       backgroundColor: '#274060',
@@ -29,12 +38,16 @@ export default class HangboardRepeaerEdit extends React.PureComponent<any, {}> {
     },
     headerTintColor: 'white'
   })
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      repeater: props.repeater
+    }
+  }
   render() {
     const {
-      params: {
-        repeater,
-      }
-    } = this.props.navigation.state;
+      repeater
+    } = this.state
   
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
@@ -46,6 +59,7 @@ export default class HangboardRepeaerEdit extends React.PureComponent<any, {}> {
         </ScrollView>
         <View style={{height: 40, backgroundColor: '#FE5F55'}}>
           <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          
           <Text style={{color: 'white'}}> Add Grip </Text>
           </View>
         </View>
@@ -53,3 +67,7 @@ export default class HangboardRepeaerEdit extends React.PureComponent<any, {}> {
     )
   }
 }
+const mapStateToProps = (state: RepeaterState) => ({
+  repeater: getRepeater(state)
+})
+export default connect(mapStateToProps, () => ({}))(HangboardRepeaerEdit)
