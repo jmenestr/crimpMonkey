@@ -12,7 +12,7 @@
     "@types/ramda": "^0.24.8",
     "@types/react-native-elements": "^0.13.2",
     "@types/react-navigation": "^1.0.2",
-    "@types/react-redux": "^5.0.5",
+    "@types/react-redux": "^5.0.7",
     "native-base": "^2.3.1",
     "ramda": "^0.24.1",
     "react": "16.0.0-alpha.12",

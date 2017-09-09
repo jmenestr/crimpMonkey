@@ -32,9 +32,9 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
-"@types/react-redux@^5.0.5":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.5.tgz#d6eff90e5480cf129aa12858bf1efd92104b480d"
+"@types/react-redux@^5.0.7":
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.7.tgz#01a5181ff6757724a4b59c13852ee6c49f65c101"
   dependencies:
     "@types/react" "*"
     redux "^3.6.0"
