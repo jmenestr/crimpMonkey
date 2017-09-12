@@ -26,7 +26,7 @@ class HangboardRepeaterComponent extends React.PureComponent<Props, {}> {
 
   static navigationOptions = ({navigation}: any) => ({
     headerTitle: <Text style={{color: 'white', fontSize: 20}}>Repeaters</Text>,
-    headerRight: <Button onPress={() => navigation.navigate('Edit')} transparent>
+    headerRight: <Button onPress={() => navigation.navigate('EditRepeater')} transparent>
             <Icon style={{color: 'white'}} name='md-create' />
           </Button>,
     headerBackTitleStyle: {

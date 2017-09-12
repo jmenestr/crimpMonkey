@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Repeater } from '../store';
 import { Row, Col } from 'native-base';
 import { View, TextInput, Text } from 'react-native';
 import NumericInput from '../commonComponents/NumericInput';
+import { Repeater } from './hangboardRepeaterModel';
 
 export interface EditFormProps {
   repeater: Repeater

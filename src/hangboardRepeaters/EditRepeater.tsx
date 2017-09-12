@@ -6,6 +6,8 @@ import {
   Text,
   TextInput,
   ScrollView,
+  TouchableOpacity,
+  Button,
 } from 'react-native';
 import {
   Row,
@@ -21,9 +23,12 @@ import { Repeater, getRepeater, RepeaterState, Grip } from './hangboardRepeaterM
 import { connect } from 'react-redux';
 
 export interface Props {
+  repeater: Repeater,
+  navigation: any
+}
+export interface State {
   repeater: Repeater
 }
-export type State = Props
 const newGrip: Grip = {
   name: 'New Grip',
   sets: []
@@ -48,7 +53,10 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
     const {
       repeater
     } = this.state
-  
+    
+    const {
+      navigation
+    } = this.props
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
         <EditWorkoutForm repeater={repeater} />
@@ -57,11 +65,12 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
           (repeater as Repeater).grips.map((grip, index) => <GripDetail key={index} grip={grip} />)
         }
         </ScrollView>
-        <View style={{height: 40, backgroundColor: '#FE5F55'}}>
-          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          
-          <Text style={{color: 'white'}}> Add Grip </Text>
+        <View style={{flex: 0}}>
+          <TouchableOpacity activeOpacity={0.5}  onPress={() => navigation.navigate('EditRepeaterGrip')}>
+          <View style={{ height: 40, alignContent: 'center', justifyContent: 'center', backgroundColor: '#FE5F55', alignItems: 'center'}}>
+            <Text style={{color: 'white'}}> Add Grip </Text>
           </View>
+          </TouchableOpacity>
         </View>
       </View>
     )

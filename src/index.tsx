@@ -9,11 +9,13 @@ import {
 import HangboardRepeater from "./hangboardRepeaters/HangboardRepeaters";
 import HangboardRepeaerEdit from "./hangboardRepeaters/EditRepeater";
 import store from './store';
+import EditRepeaterGrip from './hangboardRepeaters/EditRepeaterGrip';
 
 const HangboardApp = StackNavigator(
   {
     Home: { screen: HangboardRepeater },
-    Edit: { screen: HangboardRepeaerEdit }
+    EditRepeater: { screen: HangboardRepeaerEdit },
+    EditRepeaterGrip:  { screen: EditRepeaterGrip }
   },
 );
 
