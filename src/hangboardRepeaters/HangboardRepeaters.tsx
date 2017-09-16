@@ -6,6 +6,7 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
+
 import { Row, Col, Icon, Button } from 'native-base';
 import Grips from './Grips';
 import GripDetail from "./GripDetail";

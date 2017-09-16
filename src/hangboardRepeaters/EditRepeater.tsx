@@ -62,7 +62,11 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
         <EditWorkoutForm repeater={repeater} />
         <ScrollView style={{flex: 3, paddingHorizontal: 5}}>
         {
-          (repeater as Repeater).grips.map((grip, index) => <GripDetail key={index} grip={grip} />)
+          (repeater as Repeater).grips.map((grip, index) => (
+            <TouchableOpacity key={index} onPress={() => navigation.navigate('EditRepeaterGrip')}>
+              <GripDetail grip={grip} />
+            </TouchableOpacity>
+            ))
         }
         </ScrollView>
         <View style={{flex: 0}}>

@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Grip } from './HangboardRepeaters';
 import {
   ScrollView,
   Text,
   View,
 } from 'react-native'
 import { Row, Col } from 'native-base';
+import { Grip } from './hangboardRepeaterModel';
 
 export interface Props {
   grips: Array<Grip>

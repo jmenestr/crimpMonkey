@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { GripSet } from './HangboardRepeaters';
 import styled from 'styled-components/native';
 import { Row, Col } from 'native-base';
 import {
   View,
   Text,
 } from 'react-native'
+import { GripSet } from './hangboardRepeaterModel';
 
 interface Props {
-  set: GripSet
+  set: GripSet,
+  navigation: any
 }
 
 const BodyText = styled.Text`
@@ -27,7 +28,7 @@ const SetPropView = styled(Col)`
   borderTopColor: #2d5273;
   borderWidth: 1;
 `
-const GripSetView = ({ set }: Props) => (
+const GripSetView = ({ set, navigation }: Props) => (
   <Row key={set.setNumber}>
     <SetPropView>
       <Row style={{justifyContent: 'center'}}>
