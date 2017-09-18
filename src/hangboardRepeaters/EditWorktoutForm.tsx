@@ -9,12 +9,16 @@ export interface EditFormProps {
 }
 export default class EditWorkoutForm extends React.PureComponent<EditFormProps, {}> {
   render() {
+    const {
+      repeater
+    } = this.props
     return (
       <View style={{height: 165, backgroundColor: '#BDD5EA'}}>
         <Row>
           <Col>
             <TextInput
               style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
+              value={repeater.name}
               placeholder='Workout Name'
             />
           </Col>
@@ -23,6 +27,7 @@ export default class EditWorkoutForm extends React.PureComponent<EditFormProps, 
           <Col>
             <TextInput
               style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
+              value={repeater.hangboardType}
               placeholder='Hangboard Type'
             />
           </Col>

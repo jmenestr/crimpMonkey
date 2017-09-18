@@ -12,7 +12,7 @@ import Grips from './Grips';
 import GripDetail from "./GripDetail";
 import styled from 'styled-components/native';
 import RepeaterDetails from './RepeaterDetails';
-import { Repeater, getRepeater, RepeaterState } from './hangboardRepeaterModel';
+import { getWorkout, Repeater, WorkoutState, getSelectedWorkout } from '../models/workoutModel';
 
 
 
@@ -20,16 +20,19 @@ const BodyText = styled.Text`
 color: #E0E4E8;
 fontSize: 16;
 `
-interface Props {
+
+interface MappedProps {
   repeater: Repeater
 }
+export type Props = MappedProps
 class HangboardRepeaterComponent extends React.PureComponent<Props, {}> {
 
   static navigationOptions = ({navigation}: any) => ({
     headerTitle: <Text style={{color: 'white', fontSize: 20}}>Repeaters</Text>,
-    headerRight: <Button onPress={() => navigation.navigate('EditRepeater')} transparent>
-            <Icon style={{color: 'white'}} name='md-create' />
-          </Button>,
+    headerRight: 
+      <Button onPress={() => navigation.navigate('EditRepeater')} transparent>
+        <Icon style={{color: 'white'}} name='md-create' />
+      </Button>,
     headerBackTitleStyle: {
       color: 'white'
     },
@@ -54,8 +57,8 @@ class HangboardRepeaterComponent extends React.PureComponent<Props, {}> {
   }
 }
 
-const mapStateToProps = (state: RepeaterState) => ({
-  repeater: getRepeater(state)
+const mapStateToProps = (state: WorkoutState) => ({
+  repeater: getSelectedWorkout(state),
 })
 const HangboardRepeaters = connect(mapStateToProps, () => ({}))(HangboardRepeaterComponent)
 export default HangboardRepeaters

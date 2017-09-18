@@ -10,10 +10,12 @@ import HangboardRepeater from "./hangboardRepeaters/HangboardRepeaters";
 import HangboardRepeaerEdit from "./hangboardRepeaters/EditRepeater";
 import store from './store';
 import EditRepeaterGrip from './hangboardRepeaters/EditRepeaterGrip';
+import Workouts from './workouts/Workouts';
 
 const HangboardApp = StackNavigator(
   {
-    Home: { screen: HangboardRepeater },
+    Home: { screen: Workouts },
+    HangboardRepeater: { screen: HangboardRepeater },
     EditRepeater: { screen: HangboardRepeaerEdit },
     EditRepeaterGrip:  { screen: EditRepeaterGrip }
   },

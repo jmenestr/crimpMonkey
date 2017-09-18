@@ -21,6 +21,7 @@ import EditWorkoutForm from './EditWorktoutForm';
 import GripDetail from './GripDetail';
 import { Repeater, getRepeater, RepeaterState, Grip } from './hangboardRepeaterModel';
 import { connect } from 'react-redux';
+import { AppState } from '../store';
 
 export interface Props {
   repeater: Repeater,
@@ -46,7 +47,7 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      repeater: props.repeater
+      repeater: {...props.repeater}
     }
   }
   render() {
@@ -80,7 +81,7 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
     )
   }
 }
-const mapStateToProps = (state: RepeaterState) => ({
-  repeater: getRepeater(state)
+const mapStateToProps = (state: AppState) => ({
+  repeater: state.selectedWorkout
 })
 export default connect(mapStateToProps, () => ({}))(HangboardRepeaerEdit)
