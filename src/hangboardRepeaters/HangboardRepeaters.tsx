@@ -13,6 +13,7 @@ import GripDetail from "./GripDetail";
 import styled from 'styled-components/native';
 import RepeaterDetails from './RepeaterDetails';
 import { getWorkout, Repeater, WorkoutState, getSelectedWorkout } from '../models/workoutModel';
+import EditRepeaterButton from './EditRepeaterButton';
 
 
 
@@ -29,10 +30,7 @@ class HangboardRepeaterComponent extends React.PureComponent<Props, {}> {
 
   static navigationOptions = ({navigation}: any) => ({
     headerTitle: <Text style={{color: 'white', fontSize: 20}}>Repeaters</Text>,
-    headerRight: 
-      <Button onPress={() => navigation.navigate('EditRepeater')} transparent>
-        <Icon style={{color: 'white'}} name='md-create' />
-      </Button>,
+    headerRight: <EditRepeaterButton navigation={navigation} />,
     headerBackTitleStyle: {
       color: 'white'
     },

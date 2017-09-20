@@ -26,4 +26,4 @@ const ConnectedApp = () => (
     <HangboardApp />
   </Provider>
 )
-export default ConnectedApp;
+export default ConnectedApp

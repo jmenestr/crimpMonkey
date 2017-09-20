@@ -2,23 +2,46 @@ import * as React from 'react';
 import { Row, Col } from 'native-base';
 import { View, TextInput, Text } from 'react-native';
 import NumericInput from '../commonComponents/NumericInput';
-import { Repeater } from './hangboardRepeaterModel';
+import { RepeaterDetails, Repeater, WorkoutState, getEditableWorkout, getEditableName, getEditableHangboardType, updateWorkoutDetailsAction } from '../models/workoutModel';
+import { MappedProps, MappedDispatch } from '../workouts/Workouts';
+import { Dispatch, connect } from 'react-redux';
 
-export interface EditFormProps {
-  repeater: Repeater
+export interface MappedProps {
+  name: string
+  hangboardType: string
 }
-export default class EditWorkoutForm extends React.PureComponent<EditFormProps, {}> {
+
+export interface MappedDispatch {
+  edit: (key: Partial<RepeaterDetails>, value: string | number) => void  
+}
+export type Props = MappedDispatch & MappedProps
+class EditWorkoutFormComponent extends React.PureComponent<Props, {}> {
+
+   
+  onNameChange = (event: any) => {
+    const name = event.nativeEvent.text;
+    this.props.edit('name', name);
+  }
+
+  onHangboardNameChange = (event: any) => {
+    const name = event.nativeEvent.text;
+    this.props.edit('hangboardType', name);
+  }
   render() {
+    console.log('form rendering')
     const {
-      repeater
+      name,
+      hangboardType,
     } = this.props
+   
     return (
       <View style={{height: 165, backgroundColor: '#BDD5EA'}}>
         <Row>
           <Col>
             <TextInput
+              onChange={this.onNameChange}
               style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
-              value={repeater.name}
+              value={name}
               placeholder='Workout Name'
             />
           </Col>
@@ -26,8 +49,9 @@ export default class EditWorkoutForm extends React.PureComponent<EditFormProps, 
         <Row>
           <Col>
             <TextInput
+              onChange={this.onHangboardNameChange}
               style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
-              value={repeater.hangboardType}
+              value={hangboardType}
               placeholder='Hangboard Type'
             />
           </Col>
@@ -50,3 +74,18 @@ export default class EditWorkoutForm extends React.PureComponent<EditFormProps, 
     )
   }
 }
+
+const mapStateToProps = (state: WorkoutState): MappedProps => {
+  console.log('mapping props')
+  return {
+    name: getEditableName(state),
+    hangboardType: getEditableHangboardType(state),
+  };
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<WorkoutState>): MappedDispatch => ({
+  edit: (key: Partial<RepeaterDetails>, value: string | number) => dispatch(updateWorkoutDetailsAction({ key, value }))
+})
+
+const WorkoutForm = connect(mapStateToProps, mapDispatchToProps)(EditWorkoutFormComponent);
+export default WorkoutForm;

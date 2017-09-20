@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { Workout, AppState } from '../store';
+import { Workout } from '../store';
 import styled from 'styled-components/native';
 import { setSelectedRepeater, repeater, Repeater } from '../hangboardRepeaters/hangboardRepeaterModel';
 import { getWorkouts, setSelectedWorkoutAction } from '../models/workoutModel';

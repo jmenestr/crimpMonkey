@@ -1,6 +1,4 @@
 import * as React from 'react';
-
-
 import {
   View,
   Text,
@@ -19,22 +17,23 @@ import { Jiro, Isao } from 'react-native-textinput-effects';
 import NumericInput from "../commonComponents/NumericInput";
 import EditWorkoutForm from './EditWorktoutForm';
 import GripDetail from './GripDetail';
-import { Repeater, getRepeater, RepeaterState, Grip } from './hangboardRepeaterModel';
-import { connect } from 'react-redux';
-import { AppState } from '../store';
+import { connect, Dispatch } from 'react-redux';
+import { Repeater, Grip, WorkoutState, getSelectedWorkout, getEditableWorkout, RepeaterDetails, updateWorkoutDetailsAction, getEditableName, getEditableHangboardType } from '../models/workoutModel';
 
-export interface Props {
-  repeater: Repeater,
+export interface OwnProps {
   navigation: any
 }
-export interface State {
+export interface MappedProps {
   repeater: Repeater
+  name: string;
+  hangboardType: string;
 }
-const newGrip: Grip = {
-  name: 'New Grip',
-  sets: []
+export interface MappedDispatch {
+  edit: (key: Partial<RepeaterDetails>, value: string | number) => void
 }
-class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
+
+export type Props = OwnProps & MappedProps & MappedDispatch
+class HangboardRepeaerEdit extends React.PureComponent<Props, {}> {
   static navigationOptions = ({ navigation }: any) => ({
     headerStyle: {
       backgroundColor: '#274060',
@@ -44,23 +43,19 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
     },
     headerTintColor: 'white'
   })
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      repeater: {...props.repeater}
-    }
-  }
+
   render() {
+    console.log('name', this.props.name)
     const {
-      repeater
-    } = this.state
-    
-    const {
-      navigation
+      navigation,
+      repeater,
+      edit,
+      name,
+      hangboardType
     } = this.props
     return (
       <View style={{backgroundColor: 'white', flex: 1}}>
-        <EditWorkoutForm repeater={repeater} />
+        <EditWorkoutForm name={name} hangboardType={hangboardType} onChange={edit} />
         <ScrollView style={{flex: 3, paddingHorizontal: 5}}>
         {
           (repeater as Repeater).grips.map((grip, index) => (
@@ -81,7 +76,15 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, State> {
     )
   }
 }
-const mapStateToProps = (state: AppState) => ({
-  repeater: state.selectedWorkout
+const mapStateToProps = (state: WorkoutState): MappedProps => ({
+  repeater: getEditableWorkout(state),
+  name: getEditableName(state),
+  hangboardType: getEditableHangboardType(state),
+
 })
-export default connect(mapStateToProps, () => ({}))(HangboardRepeaerEdit)
+
+const mapDispatchToProps = (dispatch: Dispatch<WorkoutState>): MappedDispatch => ({
+  edit: (key: Partial<RepeaterDetails>, value: string | number) => dispatch(updateWorkoutDetailsAction({ key, value }))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HangboardRepeaerEdit)
