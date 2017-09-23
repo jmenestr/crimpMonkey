@@ -6,6 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "prestorybook": "rnstl",
     "build:watch": "./node_modules/typescript/bin/tsc --watch",
+    "build:storybook": "./node_modules/typescript/bin/tsc -p ./tsconfig.storybook.json --watch",
     "test": "jest",
     "haul": "haul start",
     "storybook": "storybook start -p 7007"
