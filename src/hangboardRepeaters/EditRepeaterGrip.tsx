@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Row, Col } from 'native-base';
-import { Grip } from './hangboardRepeaterModel';
 import GripSetView from './GripSetView';
 import styled from 'styled-components/native';
 import NumericInput from '../commonComponents/NumericInput';
+import { WorkoutState, getSelectedGrip, Grip } from '../models/workoutModel';
+import { OwnProps, MappedProps } from './EditRepeater';
+import { connect } from 'react-redux';
 import {
   View,
   Text,
@@ -13,35 +15,15 @@ import {
 } from 'react-native'
 
 
-export interface Props {
-  grip: Grip,
+interface OwnProps {
   navigation: any
 }
-const grip = {
-  name: 'Jug',
-  sets: [
-    {
-      setNumber: 1,
-      goalWeight: 30,
-      reps: 7,
-      complete: false
-    },
-    {
-      setNumber: 2,
-      goalWeight: 40,
-      reps: 7,
-      complete: false
-    }
-  ]
+
+interface MappedProps {
+  grip: Grip
 }
 
-const getNewSet = () => ({
-  setNumber: 3,
-  goalWeight: 0,
-  reps: 0,
-  complete: false
-})
-
+export type Props = OwnProps & MappedProps
 const GripDetailCard = styled.View`
 backgroundColor: #1B2845;
 marginTop: 5;
@@ -70,7 +52,7 @@ flexDirection: row;
 justifyContent: center;
 alignItems: center;
 `
-export default class EditRepeaterGrip extends React.PureComponent<Props, {}> {
+class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
   static navigationOptions = ({ navigation }: any) => ({
     headerStyle: {
       backgroundColor: '#274060',
@@ -82,14 +64,12 @@ export default class EditRepeaterGrip extends React.PureComponent<Props, {}> {
   })
   
   addSet = () => {
-    grip.sets.push(getNewSet())
-    this.forceUpdate()
+    console.log('add set')
   }
   render() {
     const {
-      name,
-      sets
-    } = grip
+      grip
+    } = this.props
     return (
       <View style={{flex: 1}}>
         <View style={{height: 30, marginBottom: 5, backgroundColor: '#BDD5EA'}}>
@@ -97,6 +77,7 @@ export default class EditRepeaterGrip extends React.PureComponent<Props, {}> {
             <Col>
               <TextInput
                 style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
+                value={grip.name}
                 placeholder='Grip Name'
               />
             </Col>
@@ -104,7 +85,7 @@ export default class EditRepeaterGrip extends React.PureComponent<Props, {}> {
         </View>
         <ScrollView style={{flex: 1, paddingHorizontal: 5}}>
           {
-            sets.map((set, idx) => (
+            grip.sets.map((set, idx) => (
               <GripDetailCard key={idx}>
                 <Title> Set { idx + 1} </Title>
                 <SetDetailsView>
@@ -128,3 +109,10 @@ export default class EditRepeaterGrip extends React.PureComponent<Props, {}> {
     )
   }
 }
+
+const mapStateToProps = (state: WorkoutState): MappedProps => ({
+  grip: getSelectedGrip(state),
+})
+
+const EditRepeaterGrip = connect(mapStateToProps, () => ({}))(EditRepeaterGripComponent);
+export default EditRepeaterGrip;

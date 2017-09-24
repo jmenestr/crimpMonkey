@@ -2,17 +2,15 @@ import * as React from 'react';
 import { Row, Col } from 'native-base';
 import { View, TextInput, Text } from 'react-native';
 import NumericInput from '../commonComponents/NumericInput';
-import { RepeaterDetails, Repeater, WorkoutState, getEditableWorkout, getEditableName, getEditableHangboardType, updateWorkoutDetailsAction } from '../models/workoutModel';
-import { MappedProps, MappedDispatch } from '../workouts/Workouts';
+import { RepeaterDetails, Repeater, WorkoutState, getEditableDetails, RepeaterDetailKeys, updateWorkoutDetailsAction } from '../models/workoutModel';
 import { Dispatch, connect } from 'react-redux';
 
 export interface MappedProps {
-  name: string
-  hangboardType: string
+  details: RepeaterDetails
 }
 
 export interface MappedDispatch {
-  edit: (key: Partial<RepeaterDetails>, value: string | number) => void  
+  edit: (key: Partial<RepeaterDetailKeys>, value: string | number) => void  
 }
 export type Props = MappedDispatch & MappedProps
 class EditWorkoutFormComponent extends React.PureComponent<Props, {}> {
@@ -27,13 +25,32 @@ class EditWorkoutFormComponent extends React.PureComponent<Props, {}> {
     const name = event.nativeEvent.text;
     this.props.edit('hangboardType', name);
   }
+
+  onOffDurationChange = (event: any) => {
+    const value = parseInt(event.nativeEvent.text);
+    this.props.edit('offDuration', value);
+  }
+
+  onOnDurationChange = (event: any) => {
+    const value = parseInt(event.nativeEvent.text);
+    this.props.edit('onDuration', value);
+  }
+
+  onRestDurationChange = (event: any) => {
+    const value = parseInt(event.nativeEvent.text);
+    this.props.edit('restDuration', value);
+  }
+
+  convertNumberToString = (value: any) => isNaN(value) ? '' : value.toString()
   render() {
-    console.log('form rendering')
     const {
       name,
       hangboardType,
-    } = this.props
-   
+      onDuration,
+      offDuration,
+      restDuration,
+    } = this.props.details
+    
     return (
       <View style={{height: 165, backgroundColor: '#BDD5EA'}}>
         <Row>
@@ -58,16 +75,16 @@ class EditWorkoutFormComponent extends React.PureComponent<Props, {}> {
         </Row>
         <Row style={{ justifyContent: 'space-between'}}>
           <Col style={{alignItems: 'center', flex: 1}}>
+            <Text style={{fontSize: 12}}> Hang Duration </Text>
+            <NumericInput value={this.convertNumberToString(onDuration)} onChange={this.onOnDurationChange} label='sec' />
+          </Col>
+          <Col style={{alignItems: 'center', flex: 1}}>
             <Text style={{fontSize: 12}}> Rest Between Reps </Text>
-            <NumericInput label='sec' />
+            <NumericInput value={this.convertNumberToString(offDuration)} onChange={this.onOffDurationChange} label='sec' />
           </Col>
-          <Col style={{alignItems: 'center', flex: 1}}>
-          <Text style={{fontSize: 12}}> Rep Duration </Text>
-          <NumericInput label='sec' />
-          </Col>
-          <Col style={{alignItems: 'center', flex: 1}}>
-          <Text style={{fontSize: 12}}> Test Between Sets </Text>
-          <NumericInput label='sec' />
+            <Col style={{alignItems: 'center', flex: 1}}>
+            <Text style={{fontSize: 12}}> Rest Between Sets </Text>
+          <NumericInput value={this.convertNumberToString(restDuration)} onChange={this.onRestDurationChange} label='sec' />
           </Col>
         </Row>
       </View>
@@ -76,15 +93,13 @@ class EditWorkoutFormComponent extends React.PureComponent<Props, {}> {
 }
 
 const mapStateToProps = (state: WorkoutState): MappedProps => {
-  console.log('mapping props')
   return {
-    name: getEditableName(state),
-    hangboardType: getEditableHangboardType(state),
+    details: getEditableDetails(state),
   };
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<WorkoutState>): MappedDispatch => ({
-  edit: (key: Partial<RepeaterDetails>, value: string | number) => dispatch(updateWorkoutDetailsAction({ key, value }))
+  edit: (key: Partial<RepeaterDetailKeys>, value: string | number) => dispatch(updateWorkoutDetailsAction({ key, value }))
 })
 
 const WorkoutForm = connect(mapStateToProps, mapDispatchToProps)(EditWorkoutFormComponent);

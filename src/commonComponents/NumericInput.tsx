@@ -7,7 +7,8 @@ import {
 
 export interface Props {
   value?: number
-  label: string
+  label: string;
+  onChange: (e: any) => void
 }
 
 export interface State {
@@ -25,15 +26,11 @@ export default class NumericInput extends React.PureComponent<Props, State> {
   focus = () => this.setState({ isFocused: true })
   unfocus = () => this.setState({ isFocused: false })
 
-  getValue = (value: number): string => {
-    if (isNaN(value)) {
-      return '0'
-    }
-    return value.toString();
-  }
   render() {
     const {
-      label
+      label,
+      onChange,
+      value = 0,
     } = this.props;
 
     return (
@@ -41,8 +38,10 @@ export default class NumericInput extends React.PureComponent<Props, State> {
         <TextInput
           defaultValue='0'
           keyboardType='numeric'
+          onChange={onChange}
           onFocus={this.focus}
           onBlur={this.unfocus}
+          value={value.toString()}
           style={{
             borderBottomColor: '#274060',
             borderBottomWidth: 2,

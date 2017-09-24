@@ -1,30 +1,27 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
 
-const {
-  OccurenceOrderPlugin,
-  includePaths,
-  excludePaths
-} = require("@storybook/react-native/dist/server/config/utils");
+const SRC_PATH = path.join(__dirname, '../src');
 
 module.exports = {
-  devtool: "#inline-source-map", // Otherwise getting errors about e.g. `Relay` not being defined.
-  resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx"]
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        loaders: [
-          "awesome-typescript-loader?configFileName=./tsconfig.json&silent=true&transpileOnly=true&target=es6&useBabel=true&useCache=true"
+    module: {
+        rules: [
+            { test: /\.ts$/, loader: 'ts-loader', exclude: /node_modules/ },
+            { test: /\.tsx$/, loader: 'ts-loader', exclude: /node_modules/ },
+            {
+                test: /\.(jpg|png|svg)$/,
+                loader: 'file-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/,
+                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+            }
         ]
-      }
-    ]
-  },
-  plugins: [
-    new OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin()
-  ]
+    },
+
+    resolve: {
+        modules: [SRC_PATH, 'node_modules']
+    },
+
+    plugins: []
 };
