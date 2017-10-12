@@ -4,6 +4,9 @@ import { Workout } from '../store';
 import styled from 'styled-components/native';
 import { setSelectedRepeater, repeater, Repeater } from '../hangboardRepeaters/hangboardRepeaterModel';
 import { getWorkouts, setSelectedWorkoutAction } from '../models/workoutModel';
+import { Icon } from 'native-base';
+import AddRepeaterButtom from '../hangboardRepeaters/AddRepeaterButton';
+import AddRepeaterButton from '../hangboardRepeaters/AddRepeaterButton';
 import {
   View,
   TouchableOpacity,
@@ -38,6 +41,7 @@ class WorkoutsView extends React.PureComponent<Props, {}> {
 
   static navigationOptions = ({ navigation }: any) => ({
     headerTitle: <Text style={{color: 'white', fontSize: 20}}> Workouts </Text>,
+    headerRight: <AddRepeaterButton navigation={navigation} />,
     headerBackTitleStyle: {
       color: 'white'
     },

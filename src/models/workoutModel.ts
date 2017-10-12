@@ -34,11 +34,12 @@ export interface RepeaterDetails {
   restDuration: number;
   onDuration: number;
   offDuration: number;
-  grips: Array<Grip>
 }
+
+
 export interface Repeater {
   name: string;
-  id: number;
+  id?: number;
   hangboardType: string,
   date: Date;
   restDuration: number;
@@ -46,6 +47,15 @@ export interface Repeater {
   offDuration: number;
   grips: Array<Grip>
 }
+const getEmptyRepeater = (): Repeater => ({
+  name: '',
+  hangboardType: '',
+  date: new Date(),
+  restDuration: 0,
+  onDuration: 0,
+  offDuration: 0,
+  grips: [], 
+});
 
 export interface WorkoutState {
   workouts: {
@@ -94,6 +104,7 @@ export const getSelectedGripId = (state: WorkoutState): number | undefined => fp
 
 export const receiveWorkoutsAction = actionCreator<{ workouts: Array<Repeater>}>('RECEIVE_WORKOUTS');
 export const setSelectedWorkoutAction = actionCreator<{ workoutId: number}>('SET_SELECTED_WORKOUT');
+export const setNewWorkout = actionCreator<{}>('SET_NEW_WORKOUT');
 export const setSelectedGripAction = actionCreator<{ gripIndex: number | undefined}>('SET_SELECTED_GRIP');
 export const updatedSelectedGripAction = actionCreator<{ grip: Grip }>('UPDATED_SELECTED_GRIP');
 export const updateWorkoutDetailsAction = actionCreator<{ key: Partial<RepeaterDetailKeys>, value: string | number}>('UPDATE_REPEATER_DETAILS');
@@ -101,9 +112,30 @@ export const saveWorkoutAction = actionCreator<{}>('SAVE_WORKOUT');
 export const updateGripNameAction = actionCreator<{name: string}>('UPDATE_GRIP_NAME');
 export const saveGripAction = actionCreator<{}>('SAVE_GRIP');
 
-export const updateSetReps = actionCreator<{ repCount: number}>('UPDATE_SET_REP');
-// const updateRepsHandler = (state: WorkoutState, payload: { repCo})
-export const updateSetWeight = actionCreator<{ setWeight: number}>('UPDATE_SET_WEIGHT');
+export const updateSetReps = actionCreator<{ index: number, repCount: number}>('UPDATE_SET_REP');
+const updateRepsHandler = (state: WorkoutState, payload: { index: number, repCount: number}) => {
+  const {
+    index,
+    repCount
+  } = payload;
+  const sets = getEditableGrip(state).sets;
+  const updatedSets = [...sets];
+  const updatedSet = fp.set('reps', repCount, updatedSets[index])
+  updatedSets.splice(index, 1, updatedSet)
+  return fp.set(editableSetsPath, updatedSets, state);
+}
+export const updateSetWeight = actionCreator<{ index: number, weight: number}>('UPDATE_SET_WEIGHT');
+const updateWeightHandler = (state: WorkoutState, payload: { index: number, weight: number}) => {
+  const {
+    index,
+    weight
+  } = payload;
+  const sets = getEditableGrip(state).sets;
+  const updatedSets = [...sets];
+  const updatedSet = fp.set('goalWeight', weight, updatedSets[index])
+  updatedSets.splice(index, 1, updatedSet)
+  return fp.set(editableSetsPath, updatedSets, state);
+}
 export const addGripSet = actionCreator<{}>('ADD_GRIP_SET');
 const addGripSetHandler = (state: WorkoutState) => {
   const sets = getEditableGrip(state).sets;
@@ -133,6 +165,14 @@ const setSelectedWorkout = (state: WorkoutState, payload: { workoutId: number}) 
     fp.set(gripsPath, grips),
   )(state)
 }
+const setNewWorkoutHandler = (state: WorkoutState) => {
+  const {grips, ...details} = getEmptyRepeater();
+  return fp.flow(
+    fp.set(selectedWorkoutIdPath, undefined),
+    fp.set(detailsPath, details),
+    fp.set(gripsPath, grips),
+  )(state);
+}
 const updateEditableWorkoutDetail = (state: WorkoutState, payload: { key: Partial<RepeaterDetailKeys>, value: string | number}) => {
   const {
     key,
@@ -145,12 +185,12 @@ const saveEditableWorkout = (state: WorkoutState, payload: {}) => {
   const details = getEditableDetails(state);
   const grips = getEditableGrips(state);
   const newWorkout = {
-    id: selectedWorkoutId,
+    id: !!selectedWorkoutId ? selectedWorkoutId : Math.random(),
     ...details,
     grips,
   }
   return fp.flow(
-    fp.set(`${workoutByIdPath}[${selectedWorkoutId}]`, newWorkout),
+    fp.set(`${workoutByIdPath}[${newWorkout.id}]`, newWorkout),
   )(state);
 }
 const setSelectedGrip = (state: WorkoutState, payload: { gripIndex: number | undefined}) => {
@@ -194,5 +234,8 @@ const workoutReducer =
   .case(updateGripNameAction, updateGripName)
   .case(saveGripAction, saveGrip)
   .case(addGripSet, addGripSetHandler)
+  .case(updateSetReps, updateRepsHandler)
+  .case(updateSetWeight, updateWeightHandler)
+  .case(setNewWorkout, setNewWorkoutHandler)
 
 export default workoutReducer;

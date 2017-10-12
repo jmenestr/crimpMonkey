@@ -32,7 +32,7 @@ const GripSetView = ({ set, navigation }: Props) => (
   <Row key={set.setNumber}>
     <SetPropView>
       <Row style={{justifyContent: 'center'}}>
-        <BodyText>{ set.setNumber}</BodyText>
+        <BodyText>{ set.reps}</BodyText>
         <BodyText> reps</BodyText>
         </Row>
       </SetPropView>

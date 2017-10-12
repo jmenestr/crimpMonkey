@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col } from 'native-base';
 import styled from 'styled-components/native';
 import NumericInput from '../commonComponents/NumericInput';
-import { WorkoutState, Grip, getEditableGrip, updateGripNameAction, addGripSet } from '../models/workoutModel';
+import { WorkoutState, Grip, getEditableGrip, updateGripNameAction, addGripSet, updateSetReps, updateSetWeight } from '../models/workoutModel';
 import { connect, Dispatch } from 'react-redux';
 import SaveGripButton from './SaveGrip';
 import {
@@ -25,6 +25,8 @@ interface MappedProps {
 interface MappedDispatch {
   updateGripName: (name: string) => void
   addGripSet: () => void
+  updateReps: (index: number, repCount: number) => void
+  updateWeight: (index: number, weight: number) => void
 }
 export type Props = OwnProps & MappedProps & MappedDispatch
 const GripDetailCard = styled.View`
@@ -71,6 +73,18 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
     const newName = e.nativeEvent.text;
     this.props.updateGripName(newName)
   }
+
+  updateRepCount = (value: string, index: number) => {
+    const newRepCount = parseInt(value);
+    const parsedReps = isNaN(newRepCount) ? 0 : newRepCount;    
+    this.props.updateReps(index, parsedReps);
+  }
+
+  updateWeight = (value: string, index: number) => {
+    const newWeight = parseInt(value);
+    const parsedRepCount = isNaN(newWeight) ? 0 : newWeight;    
+    this.props.updateWeight(index, parsedRepCount);
+  }
   render() {
     const {
       grip,
@@ -96,9 +110,9 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
               <GripDetailCard key={idx}>
                 <Title> Set { idx + 1} </Title>
                 <SetDetailsView>
-                <NumericInput value={set.reps} label='reps' />
+                <NumericInput onChange={(e) => this.updateRepCount(e.nativeEvent.text, idx)} value={set.reps} label='reps' />
                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18}}> X </Text>
-                <NumericInput value={set.goalWeight} label='lbs' />
+                <NumericInput onChange={e => this.updateWeight(e.nativeEvent.text, idx)}value={set.goalWeight} label='lbs' />
                 </SetDetailsView>
               </GripDetailCard>
             ))
@@ -123,7 +137,9 @@ const mapStateToProps = (state: WorkoutState): MappedProps => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<WorkoutState>): MappedDispatch => ({
   updateGripName: (name: string) => dispatch(updateGripNameAction({ name })),
-  addGripSet: () => dispatch(addGripSet({}),
+  addGripSet: () => dispatch(addGripSet({})),
+  updateReps: (index: number, repCount: number) => dispatch(updateSetReps({ index, repCount})),
+  updateWeight: (index: number, weight: number) => dispatch(updateSetWeight({ index, weight}))
 });
 
 const EditRepeaterGrip = connect(mapStateToProps, mapDispatchToProps)(EditRepeaterGripComponent);
