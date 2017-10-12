@@ -71,6 +71,7 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, {}> {
         </ScrollView>
         <View style={{flex: 0}}>
           <TouchableOpacity activeOpacity={0.5}  onPress={() => {
+            this.props.setSelectedGrip(undefined);
             navigation.navigate('EditRepeaterGrip')
           }}>
           <View style={{ height: 40, alignContent: 'center', justifyContent: 'center', backgroundColor: '#FE5F55', alignItems: 'center'}}>

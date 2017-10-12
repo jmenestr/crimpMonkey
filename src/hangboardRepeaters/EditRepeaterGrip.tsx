@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Row, Col } from 'native-base';
-import GripSetView from './GripSetView';
 import styled from 'styled-components/native';
 import NumericInput from '../commonComponents/NumericInput';
-import { WorkoutState, getSelectedGrip, Grip } from '../models/workoutModel';
-import { OwnProps, MappedProps } from './EditRepeater';
-import { connect } from 'react-redux';
+import { WorkoutState, Grip, getEditableGrip, updateGripNameAction, addGripSet } from '../models/workoutModel';
+import { connect, Dispatch } from 'react-redux';
+import SaveGripButton from './SaveGrip';
 import {
   View,
   Text,
@@ -23,7 +22,11 @@ interface MappedProps {
   grip: Grip
 }
 
-export type Props = OwnProps & MappedProps
+interface MappedDispatch {
+  updateGripName: (name: string) => void
+  addGripSet: () => void
+}
+export type Props = OwnProps & MappedProps & MappedDispatch
 const GripDetailCard = styled.View`
 backgroundColor: #1B2845;
 marginTop: 5;
@@ -54,6 +57,7 @@ alignItems: center;
 `
 class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
   static navigationOptions = ({ navigation }: any) => ({
+    headerRight: <SaveGripButton navigation={navigation} />,
     headerStyle: {
       backgroundColor: '#274060',
     },
@@ -63,12 +67,14 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
     headerTintColor: 'white'
   })
   
-  addSet = () => {
-    console.log('add set')
+  updateName = (e: any) => {
+    const newName = e.nativeEvent.text;
+    this.props.updateGripName(newName)
   }
   render() {
     const {
-      grip
+      grip,
+      addGripSet,
     } = this.props
     return (
       <View style={{flex: 1}}>
@@ -78,6 +84,7 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
               <TextInput
                 style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
                 value={grip.name}
+                onChange={this.updateName}
                 placeholder='Grip Name'
               />
             </Col>
@@ -89,9 +96,9 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
               <GripDetailCard key={idx}>
                 <Title> Set { idx + 1} </Title>
                 <SetDetailsView>
-                <NumericInput label='reps' />
+                <NumericInput value={set.reps} label='reps' />
                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18}}> X </Text>
-                <NumericInput label='lbs' />
+                <NumericInput value={set.goalWeight} label='lbs' />
                 </SetDetailsView>
               </GripDetailCard>
             ))
@@ -99,7 +106,7 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
           
         </ScrollView>
         <View style={{flex: 0}}>
-            <TouchableOpacity activeOpacity={0.5} onPress={this.addSet}>
+            <TouchableOpacity activeOpacity={0.5} onPress={addGripSet}>
             <View style={{ height: 40, alignContent: 'center', justifyContent: 'center', backgroundColor: '#FE5F55', alignItems: 'center'}}>
               <Text style={{color: 'white'}}> Add Set </Text>
             </View>
@@ -111,8 +118,13 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
 }
 
 const mapStateToProps = (state: WorkoutState): MappedProps => ({
-  grip: getSelectedGrip(state),
+  grip: getEditableGrip(state),
 })
 
-const EditRepeaterGrip = connect(mapStateToProps, () => ({}))(EditRepeaterGripComponent);
+const mapDispatchToProps = (dispatch: Dispatch<WorkoutState>): MappedDispatch => ({
+  updateGripName: (name: string) => dispatch(updateGripNameAction({ name })),
+  addGripSet: () => dispatch(addGripSet({}),
+});
+
+const EditRepeaterGrip = connect(mapStateToProps, mapDispatchToProps)(EditRepeaterGripComponent);
 export default EditRepeaterGrip;

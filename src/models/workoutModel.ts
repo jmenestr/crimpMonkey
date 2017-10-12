@@ -13,6 +13,14 @@ export interface GripSet {
   reps: number;
   complete: boolean;
 }
+
+const getEmptyGripSet = (num: number): GripSet => ({
+  setNumber: num,
+  goalWeight: 0,
+  reps: 0,
+  complete: false,
+});
+
 export interface Grip {
   name: string;
   sets: Array<GripSet>;
@@ -45,10 +53,12 @@ export interface WorkoutState {
       [key: string]: Repeater
     },
     selectedWorkoutId: number | null,
-    editableWorkoutState?: {
+    editableWorkout?: {
       details: RepeaterDetails,
       grips: Array<Grip>,
       selectedGripIndex?: number | null,
+      editableGrip: Grip,
+      
     }
   }
 }
@@ -61,6 +71,8 @@ const workoutIdPath = `${editableWorkoutPath}.workoutId`
 const detailsPath = `${editableWorkoutPath}.details`
 const gripsPath = `${editableWorkoutPath}.grips`
 const selectedGripIdPath = `${editableWorkoutPath}.selectedGripIndex`
+const editableGripPath = `${editableWorkoutPath}.editableGrip`
+const editableSetsPath = `${editableGripPath}.sets`;
 
 export const getWorkout = (id: number, state: WorkoutState): Repeater =>
   fp.get(`${workoutByIdPath}[${id}]`, state)
@@ -76,19 +88,28 @@ export const getEditableRestDuration = (state: WorkoutState) => fp.get(`${detail
 export const getEditableOnDuration = (state: WorkoutState) => fp.get(`${detailsPath}.onDuration`, state);
 export const getEditableOffDuration = (state: WorkoutState) => fp.get(`${detailsPath}.offDuration`, state);
 export const getEditableGrips = (state: WorkoutState): Array<Grip> => fp.get(gripsPath, state)
-export const getSelectedGrip = (state: WorkoutState): Grip => {
-  const index = getSelectedGripId(state);
-  return fp.isNumber(index) ? getEditableGrips(state)[index] : { name: '', sets: [] };
-}
+export const getEditableGrip = (state: WorkoutState): Grip => fp.get(editableGripPath, state);
 export const getEditableWorkoutId = (state: WorkoutState): number => fp.get(workoutIdPath, state)
 export const getSelectedGripId = (state: WorkoutState): number | undefined => fp.getOr(undefined, selectedGripIdPath, state)
 
 export const receiveWorkoutsAction = actionCreator<{ workouts: Array<Repeater>}>('RECEIVE_WORKOUTS');
 export const setSelectedWorkoutAction = actionCreator<{ workoutId: number}>('SET_SELECTED_WORKOUT');
 export const setSelectedGripAction = actionCreator<{ gripIndex: number | undefined}>('SET_SELECTED_GRIP');
-export const updatedSelectedGrip = actionCreator<{ grip: Grip }>('UPDATED_SELECTED_GRIP');
+export const updatedSelectedGripAction = actionCreator<{ grip: Grip }>('UPDATED_SELECTED_GRIP');
 export const updateWorkoutDetailsAction = actionCreator<{ key: Partial<RepeaterDetailKeys>, value: string | number}>('UPDATE_REPEATER_DETAILS');
 export const saveWorkoutAction = actionCreator<{}>('SAVE_WORKOUT');
+export const updateGripNameAction = actionCreator<{name: string}>('UPDATE_GRIP_NAME');
+export const saveGripAction = actionCreator<{}>('SAVE_GRIP');
+
+export const updateSetReps = actionCreator<{ repCount: number}>('UPDATE_SET_REP');
+// const updateRepsHandler = (state: WorkoutState, payload: { repCo})
+export const updateSetWeight = actionCreator<{ setWeight: number}>('UPDATE_SET_WEIGHT');
+export const addGripSet = actionCreator<{}>('ADD_GRIP_SET');
+const addGripSetHandler = (state: WorkoutState) => {
+  const sets = getEditableGrip(state).sets;
+  const newSet = getEmptyGripSet(sets.length + 1);
+  return fp.set(editableSetsPath, sets.concat([newSet]), state);
+}
 
 const receiveWorkouts = (state: WorkoutState, payload: { workouts: Array<Repeater> }) => {
   const { workouts } = payload;
@@ -98,7 +119,6 @@ const receiveWorkouts = (state: WorkoutState, payload: { workouts: Array<Repeate
   }, {} as { [key: string]: Repeater })
   return fp.set(workoutByIdPath, myIds, state)
 }
-
 const setSelectedWorkout = (state: WorkoutState, payload: { workoutId: number}) => {
   const { workoutId } = payload;
   const workout = fp.cloneDeep(getWorkout(workoutId, state));
@@ -113,7 +133,6 @@ const setSelectedWorkout = (state: WorkoutState, payload: { workoutId: number}) 
     fp.set(gripsPath, grips),
   )(state)
 }
-
 const updateEditableWorkoutDetail = (state: WorkoutState, payload: { key: Partial<RepeaterDetailKeys>, value: string | number}) => {
   const {
     key,
@@ -121,7 +140,6 @@ const updateEditableWorkoutDetail = (state: WorkoutState, payload: { key: Partia
   } = payload
   return fp.set( `${detailsPath}.${key}`, value, state)
 }
-
 const saveEditableWorkout = (state: WorkoutState, payload: {}) => {
   const selectedWorkoutId = getSelectedWorkoutId(state);
   const details = getEditableDetails(state);
@@ -135,8 +153,37 @@ const saveEditableWorkout = (state: WorkoutState, payload: {}) => {
     fp.set(`${workoutByIdPath}[${selectedWorkoutId}]`, newWorkout),
   )(state);
 }
+const setSelectedGrip = (state: WorkoutState, payload: { gripIndex: number | undefined}) => {
+  const idx = payload.gripIndex;
+  const editableGrip = fp.isNumber(idx) ? getEditableGrips(state)[idx as number] : { name: '', sets: [] }
+  return fp.flow(
+    fp.set(selectedGripIdPath, idx),
+    fp.set(editableGripPath, fp.cloneDeep(editableGrip))
+  )(state)
+}
+const updateGripName = (state: WorkoutState, payload: { name: string }) => {
+  return fp.set(
+    `${editableGripPath}.name`,
+    payload.name
+  )(state)
+}
 
-const setSelectedGrip = (state: WorkoutState, payload: { gripIndex: number | undefined}) => fp.set(selectedGripIdPath, payload.gripIndex, state)
+const addNewGrip = (newGrip: Grip, grips: Array<Grip>) => grips.concat([newGrip]);
+
+const updateExistingGrip = (newGrip: Grip, grips: Array<Grip>, indexToSave: number) => {
+  const copiedGrips = [...grips];
+  copiedGrips.splice(indexToSave, 1, newGrip)
+  return copiedGrips;
+}
+const saveGrip = (state: WorkoutState, payload: {}) => {
+  const indexToSave = getSelectedGripId(state);
+  const grips = getEditableGrips(state);
+  const newGrip = getEditableGrip(state);
+  const newGrips = !indexToSave ? addNewGrip(newGrip, grips) : updateExistingGrip(newGrip, grips, indexToSave as number);
+  return fp.set(gripsPath, newGrips, state);
+}
+
+
 const workoutReducer =
   reducerWithInitialState({ workouts: {} })
   .case(receiveWorkoutsAction, receiveWorkouts)
@@ -144,5 +191,8 @@ const workoutReducer =
   .case(updateWorkoutDetailsAction, updateEditableWorkoutDetail)
   .case(saveWorkoutAction, saveEditableWorkout)
   .case(setSelectedGripAction, setSelectedGrip)
+  .case(updateGripNameAction, updateGripName)
+  .case(saveGripAction, saveGrip)
+  .case(addGripSet, addGripSetHandler)
 
 export default workoutReducer;
