@@ -5,6 +5,9 @@ build
 #
 .DS_Store
 
+# Storybook
+storybook/storyLoader.js
+
 # Xcode
 #
 build/
