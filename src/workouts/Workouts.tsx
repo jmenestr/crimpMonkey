@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { Workout } from '../store';
-import styled from 'styled-components/native';
-import { setSelectedRepeater, repeater, Repeater } from '../hangboardRepeaters/hangboardRepeaterModel';
-import { getWorkouts, setSelectedWorkoutAction } from '../models/workoutModel';
+import { getWorkouts, setSelectedWorkoutAction, WorkoutState, deleteWorkoutAction } from '../models/workoutModel';
 import { Icon } from 'native-base';
 import AddRepeaterButtom from '../hangboardRepeaters/AddRepeaterButton';
-import AddRepeaterButton from '../hangboardRepeaters/AddRepeaterButton';
+import WorkoutCard from './WorkoutCard';
+import Title from '../commonComponents/Title';
 import {
-  View,
-  TouchableOpacity,
   Text,
+  ScrollView,
 } from 'react-native'
 
 export interface MappedProps {
@@ -18,30 +16,18 @@ export interface MappedProps {
 }
 
 export interface MappedDispatch {
-  setSelectedRepeater: (id: number) => void;  
+  setSelectedRepeater: (id: number) => void;
+  deleteWorkout: (workoutId: number) => void;
 }
 export interface OwnProps {
   navigation: any
 }
 export type Props = OwnProps & MappedDispatch & MappedProps
-const WorkoutDetailCard = styled.View`
-backgroundColor: #1B2845;
-marginTop: 5;
-marginBottom: 5;
-`;
-
-const Title = styled.Text`
-color: white;
-fontSize: 18;
-paddingTop: 5;
-paddingBottom: 5;
-fontWeight: 900;
-`;
 class WorkoutsView extends React.PureComponent<Props, {}> {
 
   static navigationOptions = ({ navigation }: any) => ({
-    headerTitle: <Text style={{color: 'white', fontSize: 20}}> Workouts </Text>,
-    headerRight: <AddRepeaterButton navigation={navigation} />,
+    headerTitle: <Title title='Workouts' />,
+    headerRight: <AddRepeaterButtom navigation={navigation} />,
     headerBackTitleStyle: {
       color: 'white'
     },
@@ -50,36 +36,32 @@ class WorkoutsView extends React.PureComponent<Props, {}> {
     },
   })
 
-  onWorkoutPress = (repeater: Repeater) => {
-    this.props.setSelectedRepeater(repeater.id);
-    this.props.navigation.navigate('HangboardRepeater')
-  }
   render() {
     const {
       workouts,
+      setSelectedRepeater,
+      deleteWorkout,
+      navigation
     } = this.props;
     return (
-      <View>
+      <ScrollView>
         {
-          workouts.map((workout, idx) => (
-            <TouchableOpacity activeOpacity={0.7} onPress={() => this.onWorkoutPress(workout)} key={idx}>
-            <WorkoutDetailCard>
-              <Title> { workout.name } </Title>
-            </WorkoutDetailCard>
-            </TouchableOpacity>
-          ))
+          workouts.map((workout, idx) =>
+            <WorkoutCard key={idx} workout={workout} navigation={navigation} setSelectedRepeater={setSelectedRepeater} deleteRepeater={deleteWorkout} />
+          )
         }
-      </View>
+      </ScrollView>
     )
   }
 }
 
-const mapStateToProps = (state: AppState): MappedProps => ({
+const mapStateToProps = (state: WorkoutState): MappedProps => ({
   workouts: (Object as any).values(getWorkouts(state)),
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<AppState>): MappedDispatch => ({
-  setSelectedRepeater: (workoutId) => dispatch(setSelectedWorkoutAction({ workoutId }),
+const mapDispatchToProps = (dispatch: Dispatch<WorkoutState>): MappedDispatch => ({
+  setSelectedRepeater: (workoutId) => dispatch(setSelectedWorkoutAction({ workoutId })),
+  deleteWorkout: (workoutId: number) => dispatch(deleteWorkoutAction({ workoutId})),
 });
 
 const Workouts = connect(mapStateToProps, mapDispatchToProps)(WorkoutsView);

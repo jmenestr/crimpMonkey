@@ -20,6 +20,7 @@ import GripDetail from './GripDetail';
 import { connect, Dispatch } from 'react-redux';
 import { Repeater, Grip, WorkoutState, getSelectedWorkout, RepeaterDetails, updateWorkoutDetailsAction, getEditableName, getEditableHangboardType, getEditableGrips, setSelectedGripAction } from '../models/workoutModel';
 import SaveRepeaterButton from './SaveRepeater';
+import Title from '../commonComponents/Title';
 
 export interface OwnProps {
   navigation: any
@@ -40,6 +41,7 @@ class HangboardRepeaerEdit extends React.PureComponent<Props, {}> {
     headerStyle: {
       backgroundColor: '#274060',
     },
+    headerTitle: <Title title='Edit Repeater' />,
     headerRight: <SaveRepeaterButton navigation={navigation} />,
     headerBackTitleStyle: {
       color: 'white'

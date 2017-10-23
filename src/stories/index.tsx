@@ -1,12 +1,13 @@
 
 import { storiesOf } from "@storybook/react-native"
 import * as React from "react"
-import SortableList from '../commonComponents/SortableList';
-import { View } from 'react-native';
+import { View, Text} from 'react-native';
+import Card from '../commonComponents/Card';
+import './FloatingInputStory';
 
 storiesOf('Story')
-  .add('This is a list', () => 
+  .add('Card', () => 
   <View>
-   <SortableList />
+   <Card cardTitle={'Card Title'} content={() => <Text> I am content </Text>} />
   </View>
 )

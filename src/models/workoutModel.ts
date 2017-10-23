@@ -89,7 +89,7 @@ export const getWorkout = (id: number, state: WorkoutState): Repeater =>
 export const getSelectedWorkoutId = (state: WorkoutState): number => fp.get(selectedWorkoutIdPath, state)
 export const getSelectedWorkout = (state: WorkoutState): Repeater =>
   getWorkout(getSelectedWorkoutId(state), state);
-export const getWorkouts = (state: WorkoutState) => fp.get(workoutByIdPath, state);
+export const getWorkouts = (state: WorkoutState): { [key: string]: Repeater } => fp.get(workoutByIdPath, state);
 
 export const getEditableDetails = (state: WorkoutState) => fp.get(detailsPath, state);
 export const getEditableName = (state: WorkoutState) => fp.get(`${detailsPath}.name`, state);
@@ -103,6 +103,7 @@ export const getEditableWorkoutId = (state: WorkoutState): number => fp.get(work
 export const getSelectedGripId = (state: WorkoutState): number | undefined => fp.getOr(undefined, selectedGripIdPath, state)
 
 export const receiveWorkoutsAction = actionCreator<{ workouts: Array<Repeater>}>('RECEIVE_WORKOUTS');
+export const deleteWorkoutAction = actionCreator<{ workoutId: number}>('DELETE_WORKOUT');
 export const setSelectedWorkoutAction = actionCreator<{ workoutId: number}>('SET_SELECTED_WORKOUT');
 export const setNewWorkout = actionCreator<{}>('SET_NEW_WORKOUT');
 export const setSelectedGripAction = actionCreator<{ gripIndex: number | undefined}>('SET_SELECTED_GRIP');
@@ -150,6 +151,14 @@ const receiveWorkouts = (state: WorkoutState, payload: { workouts: Array<Repeate
     return acc;
   }, {} as { [key: string]: Repeater })
   return fp.set(workoutByIdPath, myIds, state)
+}
+const deleteWorkout = (state: WorkoutState, payload: { workoutId: number}) => {
+  const workouts = {...getWorkouts(state)};
+  delete workouts[payload.workoutId]
+  return fp.set(
+    workoutByIdPath,
+    workouts,
+  )(state);
 }
 const setSelectedWorkout = (state: WorkoutState, payload: { workoutId: number}) => {
   const { workoutId } = payload;
@@ -224,9 +233,11 @@ const saveGrip = (state: WorkoutState, payload: {}) => {
 }
 
 
+
 const workoutReducer =
   reducerWithInitialState({ workouts: {} })
   .case(receiveWorkoutsAction, receiveWorkouts)
+  .case(deleteWorkoutAction, deleteWorkout)
   .case(setSelectedWorkoutAction, setSelectedWorkout)
   .case(updateWorkoutDetailsAction, updateEditableWorkoutDetail)
   .case(saveWorkoutAction, saveEditableWorkout)

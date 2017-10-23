@@ -7010,6 +7010,10 @@ react-native-easy-grid@0.1.15:
     prop-types "^15.5.10"
     react-timer-mixin "^0.13.3"
 
+react-native-popup-menu@^0.8.3:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/react-native-popup-menu/-/react-native-popup-menu-0.8.3.tgz#1dbb0b4f889c9410b69b228a89d57b56aea5cc2e"
+
 react-native-storybook-loader@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/react-native-storybook-loader/-/react-native-storybook-loader-1.5.1.tgz#4d02167db71a034ce81962c87a1b7abb6e66b2b3"
@@ -7019,6 +7023,14 @@ react-native-storybook-loader@^1.5.1:
     findup "^0.1.5"
     glob "^7.1.1"
     yargs "^8.0.2"
+
+react-native-swipeout@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-swipeout/-/react-native-swipeout-2.2.2.tgz#65221abbd7992c83ec325625a45496d804eccd9f"
+  dependencies:
+    create-react-class "^15.6.0"
+    prop-types "^15.5.10"
+    react-tween-state "^0.1.5"
 
 react-native-tab-view@^0.0.67:
   version "0.0.67"

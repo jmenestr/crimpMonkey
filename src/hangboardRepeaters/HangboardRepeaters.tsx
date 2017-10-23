@@ -14,6 +14,7 @@ import styled from 'styled-components/native';
 import RepeaterDetails from './RepeaterDetails';
 import { getWorkout, Repeater, WorkoutState, getSelectedWorkout } from '../models/workoutModel';
 import EditRepeaterButton from './EditRepeaterButton';
+import RepeaterTitle from './RepeaterTitle';
 
 
 
@@ -29,7 +30,7 @@ export type Props = MappedProps
 class HangboardRepeaterComponent extends React.PureComponent<Props, {}> {
 
   static navigationOptions = ({navigation}: any) => ({
-    headerTitle: <Text style={{color: 'white', fontSize: 20}}>Repeaters</Text>,
+    headerTitle: <RepeaterTitle />,
     headerRight: <EditRepeaterButton navigation={navigation} />,
     headerBackTitleStyle: {
       color: 'white'

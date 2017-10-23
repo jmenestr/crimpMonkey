@@ -4,6 +4,7 @@ import { View, TextInput, Text } from 'react-native';
 import NumericInput from '../commonComponents/NumericInput';
 import { RepeaterDetails, Repeater, WorkoutState, getEditableDetails, RepeaterDetailKeys, updateWorkoutDetailsAction } from '../models/workoutModel';
 import { Dispatch, connect } from 'react-redux';
+import FloatingLabelInput from '../commonComponents/Input';
 
 export interface MappedProps {
   details: RepeaterDetails
@@ -52,24 +53,22 @@ class EditWorkoutFormComponent extends React.PureComponent<Props, {}> {
     } = this.props.details
     
     return (
-      <View style={{height: 165, backgroundColor: '#BDD5EA'}}>
+      <View style={{height: 165, paddingLeft: 5, paddingRight: 5, paddingTop: 5, paddingBottom: 5, backgroundColor: '#BDD5EA'}}>
         <Row>
           <Col>
-            <TextInput
+            <FloatingLabelInput
               onChange={this.onNameChange}
-              style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
               value={name}
-              placeholder='Workout Name'
+              label='Workout Name'
             />
           </Col>
         </Row>
         <Row>
           <Col>
-            <TextInput
+            <FloatingLabelInput
               onChange={this.onHangboardNameChange}
-              style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
               value={hangboardType}
-              placeholder='Hangboard Type'
+              label='Hangboard Type'
             />
           </Col>
         </Row>

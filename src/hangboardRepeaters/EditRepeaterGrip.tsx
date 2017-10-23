@@ -5,6 +5,8 @@ import NumericInput from '../commonComponents/NumericInput';
 import { WorkoutState, Grip, getEditableGrip, updateGripNameAction, addGripSet, updateSetReps, updateSetWeight } from '../models/workoutModel';
 import { connect, Dispatch } from 'react-redux';
 import SaveGripButton from './SaveGrip';
+import FloatingLabelInput from '../commonComponents/Input';
+import Title from '../commonComponents/Title';
 import {
   View,
   Text,
@@ -35,13 +37,13 @@ marginTop: 5;
 marginBottom: 5;
 `;
 
-const Title = styled.Text`
-color: white;
-fontSize: 18;
-paddingTop: 5;
-paddingBottom: 5;
-fontWeight: 900;
-`;
+// const Title = styled.Text`
+// color: white;
+// fontSize: 18;
+// paddingTop: 5;
+// paddingBottom: 5;
+// fontWeight: 900;
+// `;
 
 const SetDetailsView = styled.View`
 backgroundColor: #335C81;
@@ -60,6 +62,7 @@ alignItems: center;
 class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
   static navigationOptions = ({ navigation }: any) => ({
     headerRight: <SaveGripButton navigation={navigation} />,
+    headerTitle: <Title title='Edit Grip' />,
     headerStyle: {
       backgroundColor: '#274060',
     },
@@ -92,23 +95,18 @@ class EditRepeaterGripComponent extends React.PureComponent<Props, {}> {
     } = this.props
     return (
       <View style={{flex: 1}}>
-        <View style={{height: 30, marginBottom: 5, backgroundColor: '#BDD5EA'}}>
-          <Row>
-            <Col>
-              <TextInput
-                style={{height: 30, borderColor: '#1B2845', borderBottomWidth: 1, paddingHorizontal: 10}}
-                value={grip.name}
-                onChange={this.updateName}
-                placeholder='Grip Name'
-              />
-            </Col>
-          </Row>
+        <View style={{paddingLeft: 5, paddingRight: 5, marginBottom: 5, backgroundColor: '#BDD5EA'}}>
+          <FloatingLabelInput
+            value={grip.name}
+            onChange={this.updateName}
+            label='Grip Name'
+          />
         </View>
         <ScrollView style={{flex: 1, paddingHorizontal: 5}}>
           {
             grip.sets.map((set, idx) => (
               <GripDetailCard key={idx}>
-                <Title> Set { idx + 1} </Title>
+                <Title title={`Set ${idx + 1}`} />
                 <SetDetailsView>
                 <NumericInput onChange={(e) => this.updateRepCount(e.nativeEvent.text, idx)} value={set.reps} label='reps' />
                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18}}> X </Text>

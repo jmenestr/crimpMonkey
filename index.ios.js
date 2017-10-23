@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native'
-import StorybookUI from './storybook/index'
+import CrimpMonkey from './build'
 
-AppRegistry.registerComponent('crimpMonkey', () => StorybookUI)
+AppRegistry.registerComponent('crimpMonkey', () => CrimpMonkey)

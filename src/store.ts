@@ -58,13 +58,13 @@ export const grips2: Array<Grip> = [
       {
         setNumber: 2,
         goalWeight: 40,
-        reps: 7,
+        reps: 6,
         complete: false
       }
     ]
   },
   {
-    name: '2 Finger Pocket',
+    name: 'Sloper',
     sets: [
       {
         setNumber: 1,
@@ -75,13 +75,58 @@ export const grips2: Array<Grip> = [
       {
         setNumber: 2,
         goalWeight: 40,
+        reps: 6,
+        complete: false
+      }
+    ]
+  },
+  {
+    name: 'Sloper',
+    sets: [
+      {
+        setNumber: 1,
+        goalWeight: 30,
         reps: 7,
         complete: false
       },
       {
-        setNumber: 3,
+        setNumber: 2,
         goalWeight: 40,
+        reps: 6,
+        complete: false
+      }
+    ]
+  },
+  {
+    name: 'Sloper',
+    sets: [
+      {
+        setNumber: 1,
+        goalWeight: 30,
         reps: 7,
+        complete: false
+      },
+      {
+        setNumber: 2,
+        goalWeight: 40,
+        reps: 6,
+        complete: false
+      }
+    ]
+  },
+  {
+    name: 'Sloper',
+    sets: [
+      {
+        setNumber: 1,
+        goalWeight: 30,
+        reps: 7,
+        complete: false
+      },
+      {
+        setNumber: 2,
+        goalWeight: 40,
+        reps: 6,
         complete: false
       }
     ]
